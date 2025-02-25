@@ -1,16 +1,16 @@
-## Hi there 👋
+# Hi, I'm Advit Singh! 👋
 
-<!--
-**advit-singh/advit-singh** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I'm a proud student at Centennial High School 🎓, an aspiring AI/ML engineer 🤖, and a passionate violinist 🎻. I love exploring the intersection of technology and art, and I'm always excited to learn something new!
 
-Here are some ideas to get you started:
+## About Me
+- **Student at Centennial High School:** Constantly learning and growing. 📚
+- **Aspiring AI/ML Engineer:** Diving into the world of data, algorithms, and innovative tech. 💻
+- **Violinist:** Expressing creativity and emotion through music. 🎶
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## My Interests & Projects
+I'm passionate about:
+- **Artificial Intelligence & Machine Learning:** Whether it's experimenting with new models or exploring data analytics, I'm always curious about how tech can transform our world. 🤖📊
+- **Music & Performance:** The violin is my way of connecting with art on a deeper level. I play in an orchestra at our high school and always look forward to it!  🎻✨
+
+## Let's Connect!
+I'm always excited to chat, collaborate, or simply share ideas about AI, ML, or music. Don't hesitate to reach out! ✨
