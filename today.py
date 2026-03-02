@@ -1,23 +1,27 @@
 import os
-import time
+import json
 import requests
 from lxml import etree
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-# --- 1. SETTINGS ---
-# Set your birthday / start date here to calculate "Uptime"
+# --- SETTINGS ---
 START_DATE = datetime(2008, 12, 25) 
-
 USER_NAME = os.environ.get("USER_NAME", "")
 ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN", "")
+CACHE_FILE = "loc_cache.json" # The file where we will save the fast-cache
 
-HEADERS = {
-    "Authorization": f"Bearer {ACCESS_TOKEN}",
-    "Accept": "application/vnd.github.v3+json"
-}
+HEADERS = {"Authorization": f"Bearer {ACCESS_TOKEN}"}
+
+def run_query(query, variables=None):
+    """Runs a GraphQL query and returns the JSON data."""
+    request = requests.post("https://api.github.com/graphql", json={"query": query, "variables": variables}, headers=HEADERS)
+    if request.status_code == 200:
+        return request.json()
+    raise Exception(f"Query failed! Code: {request.status_code}. Response: {request.text}")
 
 def get_uptime():
+    """Calculates age/uptime from START_DATE."""
     now = datetime.now()
     diff = relativedelta(now, START_DATE)
     return f"{diff.years} years, {diff.months} months, {diff.days} days"
@@ -25,22 +29,13 @@ def get_uptime():
 def fetch_stats():
     print(f"Fetching stats for {USER_NAME}...")
 
-    # 1. Get Total Commits using GitHub Search API
-    commit_req = requests.get(
-        f"https://api.github.com/search/commits?q=author:{USER_NAME}", 
-        headers={"Authorization": f"Bearer {ACCESS_TOKEN}", "Accept": "application/vnd.github.cloak-preview+json"}
-    )
-    commits = commit_req.json().get("total_count", 0) if commit_req.status_code == 200 else 0
-
-    # 2. Get Repos & Contributed using GraphQL
-    query = """
+    # 1. Get Basic Stats & User ID
+    user_query = """
     query($login: String!) {
       user(login: $login) {
+        id
         repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {
           totalCount
-          nodes {
-            name
-          }
         }
         repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, PULL_REQUEST, REPOSITORY]) {
           totalCount
@@ -48,80 +43,144 @@ def fetch_stats():
       }
     }
     """
-    gql_req = requests.post("https://api.github.com/graphql", json={"query": query, "variables": {"login": USER_NAME}}, headers=HEADERS)
-    data = gql_req.json().get("data", {}).get("user", {})
+    user_data = run_query(user_query, {"login": USER_NAME})["data"]["user"]
+    author_id = user_data["id"]
+    repos_count = user_data["repositories"]["totalCount"]
+    contrib_count = user_data["repositoriesContributedTo"]["totalCount"]
+
+    # 2. Get Total Commits via Search API (Super Fast)
+    commit_req = requests.get(
+        f"https://api.github.com/search/commits?q=author:{USER_NAME}", 
+        headers={"Authorization": f"Bearer {ACCESS_TOKEN}", "Accept": "application/vnd.github.cloak-preview+json"}
+    )
+    commits = commit_req.json().get("total_count", 0) if commit_req.status_code == 200 else 0
+
+    # 3. LOC Calculation with Local Cache Logic
+    try:
+        with open(CACHE_FILE, "r") as f:
+            cache = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        cache = {}
+
+    repos_query = """
+    query ($login: String!, $cursor: String) {
+      user(login: $login) {
+        repositories(first: 50, after: $cursor, ownerAffiliations:[OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) {
+          pageInfo { hasNextPage endCursor }
+          nodes {
+            nameWithOwner
+            owner { login }
+            name
+            defaultBranchRef { target { ... on Commit { history { totalCount } } } }
+          }
+        }
+      }
+    }
+    """
     
-    repos_count = data.get("repositories", {}).get("totalCount", 0)
-    contrib_count = data.get("repositoriesContributedTo", {}).get("totalCount", 0)
-    repo_nodes = data.get("repositories", {}).get("nodes",[])
+    all_repos =[]
+    has_next = True
+    cursor = None
+    
+    # Fetch all repo names and their total commit counts
+    while has_next:
+        data = run_query(repos_query, {"login": USER_NAME, "cursor": cursor})["data"]["user"]["repositories"]
+        all_repos.extend(data["nodes"])
+        has_next = data["pageInfo"]["hasNextPage"]
+        cursor = data["pageInfo"]["endCursor"]
 
-    # 3. Calculate Lines of Code (Additions & Deletions)
-    print(f"Calculating LOC across {len(repo_nodes)} repositories...")
-    additions = 0
-    deletions = 0
+    total_additions = 0
+    total_deletions = 0
 
-    for repo in repo_nodes:
-        repo_name = repo["name"]
-        url = f"https://api.github.com/repos/{USER_NAME}/{repo_name}/stats/contributors"
+    print(f"Calculating LOC across {len(all_repos)} repositories using cache...")
+    
+    for repo in all_repos:
+        if not repo.get("defaultBranchRef"):
+            continue # Skip empty repos
+            
+        name_with_owner = repo["nameWithOwner"]
+        owner = repo["owner"]["login"]
+        name = repo["name"]
+        repo_total_commits = repo["defaultBranchRef"]["target"]["history"]["totalCount"]
         
-        # SMART RETRY LOGIC: GitHub often returns 202 while it calculates stats in the background.
-        # We will try up to 3 times, waiting 2 seconds between attempts.
-        for attempt in range(3):
-            stats_req = requests.get(url, headers=HEADERS)
-            if stats_req.status_code == 200:
-                break
-            elif stats_req.status_code == 202:
-                print(f"  -> Waiting on GitHub to cache stats for {repo_name}...")
-                time.sleep(2)
-            else:
-                break
+        # --- CACHE CHECK ---
+        # If the total commits haven't changed since yesterday, load from cache!
+        if name_with_owner in cache and cache[name_with_owner].get("total_commits") == repo_total_commits:
+            total_additions += cache[name_with_owner].get("additions", 0)
+            total_deletions += cache[name_with_owner].get("deletions", 0)
+        else:
+            # Cache miss: We made a new commit! Query ONLY this repo's lines of code
+            print(f"  -> Cache miss for {name_with_owner}. Fetching updates...")
+            repo_additions = 0
+            repo_deletions = 0
+            
+            loc_query = """
+            query ($owner: String!, $name: String!, $author_id: ID!, $cursor: String) {
+              repository(owner: $owner, name: $name) {
+                defaultBranchRef {
+                  target {
+                    ... on Commit {
+                      history(first: 100, after: $cursor, author: {id: $author_id}) {
+                        pageInfo { hasNextPage endCursor }
+                        nodes { additions deletions }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            """
+            loc_has_next = True
+            loc_cursor = None
+            
+            while loc_has_next:
+                loc_data = run_query(loc_query, {"owner": owner, "name": name, "author_id": author_id, "cursor": loc_cursor})
+                history = loc_data["data"]["repository"]["defaultBranchRef"]["target"]["history"]
+                
+                for node in history["nodes"]:
+                    repo_additions += node["additions"]
+                    repo_deletions += node["deletions"]
+                    
+                loc_has_next = history["pageInfo"]["hasNextPage"]
+                loc_cursor = history["pageInfo"]["endCursor"]
+            
+            # Update the cache with the new numbers
+            cache[name_with_owner] = {
+                "total_commits": repo_total_commits,
+                "additions": repo_additions,
+                "deletions": repo_deletions
+            }
+            total_additions += repo_additions
+            total_deletions += repo_deletions
 
-        if stats_req.status_code == 200:
-            stats = stats_req.json()
-            if isinstance(stats, list):
-                for contributor in stats:
-                    author = contributor.get("author")
-                    # Make sure the author exists and matches your exact username
-                    if author and isinstance(author, dict):
-                        login = author.get("login", "")
-                        if login.lower() == USER_NAME.lower():
-                            for week in contributor.get("weeks",[]):
-                                additions += week.get("a", 0)
-                                deletions += week.get("d", 0)
+    # Save the cache file for tomorrow's run
+    with open(CACHE_FILE, "w") as f:
+        json.dump(cache, f, indent=2)
 
-    total_loc = additions + deletions
-
-    print(f"Data fetching complete! Found {total_loc} lines of code.")
+    print(f"Complete! Found {total_additions + total_deletions} lines of code.")
     return {
         "repo_data": f"{repos_count}",
         "contrib_data": f"{contrib_count}",
         "commit_data": f"{commits:,}",
-        "loc_data": f"{total_loc:,}",
-        "loc_add_data": f"{additions:,}++",
-        "loc_del_data": f"{deletions:,}--"
+        "loc_data": f"{total_additions + total_deletions:,}",
+        "loc_add_data": f"{total_additions:,}++",
+        "loc_del_data": f"{total_deletions:,}--"
     }
 
 def update_svg(filename, stats):
-    # Parse SVG
     parser = etree.XMLParser(remove_blank_text=False)
     tree = etree.parse(filename, parser)
     
-    # Update elements by ID
     for element_id, new_text in stats.items():
-        # Uses xpath to find the ID regardless of XML namespaces
         elements = tree.xpath(f"//*[@id='{element_id}']")
         for el in elements:
             el.text = new_text
             
-    # Save file
     tree.write(filename, pretty_print=True, xml_declaration=True, encoding="utf-8")
-    print(f"Updated {filename}")
 
 if __name__ == "__main__":
-    # Gather all data
     stats = fetch_stats()
     stats["age_data"] = get_uptime()
     
-    # Update both SVGs
     update_svg("dark_mode.svg", stats)
     update_svg("light_mode.svg", stats)
