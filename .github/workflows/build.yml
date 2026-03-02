@@ -47,8 +47,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # Stage all SVG files in the root directory
-          git add *.svg
+          git add *.svg loc_cache.json
           
           # Commit only if changes were made
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update dynamic GitHub stats" && git push)
