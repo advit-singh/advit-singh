@@ -55,7 +55,7 @@
     <text x="780" y="325" class="text green" id="contrib_data">23</text>
 
     <text x="380" y="350" class="label">Commits:</text>
-    <text x="560" y="350" class="text green" id="commit_data">83</text>
+    <text x="560" y="350" class="text green" id="commit_data">84</text>
     
     <text x="650" y="350" class="label">Stars:</text>
     <text x="780" y="350" class="text green" id="star_data">0</text>
