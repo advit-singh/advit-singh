@@ -16,7 +16,7 @@
       2. Uses filter: invert(100%) to turn your black text white.
     -->
     <image 
-        x="20" 
+        x="65" 
         y="40" 
         width="250" 
         height="340" 
