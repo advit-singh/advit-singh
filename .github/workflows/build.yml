@@ -7,10 +7,10 @@ on:
       - main
       - master
   schedule:
-    - cron: "0 0 * * *" # Runs automatically at Midnight UTC every day
-  workflow_dispatch:    # Allows you to click a "Run Workflow" button in the UI
+    - cron: "0 0 * * *" # Runs automatically at Midnight UTC
+  workflow_dispatch:    # Allows manual triggering
 
-# 2. REQUIRED: Give the action permission to push files back to your repo
+# 2. Give the action permission to push files back
 permissions:
   contents: write
 
@@ -26,28 +26,29 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip' # Caches dependencies to make future runs faster
+          cache: 'pip' 
+          # We must tell the cache exactly where to find your requirements file!
+          cache-dependency-path: 'cache/requirements.txt'
 
       - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Pointing pip to the 'cache' folder
+          pip install -r cache/requirements.txt
 
       - name: 🚀 Run Python Script
         env:
-          # Make sure these match the names in your Settings > Secrets exactly
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           USER_NAME: ${{ secrets.USER_NAME }}
         run: python today.py
 
       - name: 💾 Commit and Push changes
         run: |
-          # Set the commit author to the official GitHub Actions bot
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # Stage the SVG files
-          git add dark_mode.svg light_mode.svg
+          # Stage all SVG files in the root directory
+          git add *.svg
           
-          # This logic prevents the workflow from failing if your stats haven't changed today
+          # Commit only if changes were made
           git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update dynamic GitHub stats" && git push)
