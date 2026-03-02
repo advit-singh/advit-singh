@@ -1,3 +1,5 @@
+# Script adapted from Andrew Grant (github.com/Andrew6rant)
+
 import os
 import json
 import requests
