@@ -1,4 +1,5 @@
 import os
+import time
 import requests
 from lxml import etree
 from datetime import datetime
@@ -55,27 +56,42 @@ def fetch_stats():
     repo_nodes = data.get("repositories", {}).get("nodes",[])
 
     # 3. Calculate Lines of Code (Additions & Deletions)
-    print(f"Calculating LOC across {len(repo_nodes)} repositories... (This might take a moment)")
+    print(f"Calculating LOC across {len(repo_nodes)} repositories...")
     additions = 0
     deletions = 0
 
     for repo in repo_nodes:
         repo_name = repo["name"]
-        stats_req = requests.get(f"https://api.github.com/repos/{USER_NAME}/{repo_name}/stats/contributors", headers=HEADERS)
+        url = f"https://api.github.com/repos/{USER_NAME}/{repo_name}/stats/contributors"
         
+        # SMART RETRY LOGIC: GitHub often returns 202 while it calculates stats in the background.
+        # We will try up to 3 times, waiting 2 seconds between attempts.
+        for attempt in range(3):
+            stats_req = requests.get(url, headers=HEADERS)
+            if stats_req.status_code == 200:
+                break
+            elif stats_req.status_code == 202:
+                print(f"  -> Waiting on GitHub to cache stats for {repo_name}...")
+                time.sleep(2)
+            else:
+                break
+
         if stats_req.status_code == 200:
             stats = stats_req.json()
             if isinstance(stats, list):
                 for contributor in stats:
-                    # Only tally YOUR code, not people who contributed to your repos
-                    if contributor.get("author", {}).get("login", "").lower() == USER_NAME.lower():
-                        for week in contributor.get("weeks",[]):
-                            additions += week.get("a", 0)
-                            deletions += week.get("d", 0)
+                    author = contributor.get("author")
+                    # Make sure the author exists and matches your exact username
+                    if author and isinstance(author, dict):
+                        login = author.get("login", "")
+                        if login.lower() == USER_NAME.lower():
+                            for week in contributor.get("weeks",[]):
+                                additions += week.get("a", 0)
+                                deletions += week.get("d", 0)
 
     total_loc = additions + deletions
 
-    print("Data fetching complete!")
+    print(f"Data fetching complete! Found {total_loc} lines of code.")
     return {
         "repo_data": f"{repos_count}",
         "contrib_data": f"{contrib_count}",
