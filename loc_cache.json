@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 49,
+    "total_commits": 50,
     "additions": 813,
     "deletions": 426
   },
@@ -70,7 +70,7 @@
     "deletions": 35152
   },
   "advit-singh/yt-automation": {
-    "total_commits": 255,
+    "total_commits": 256,
     "additions": 15250,
     "deletions": 1910
   },
@@ -105,6 +105,16 @@
     "deletions": 3720
   },
   "advit-singh/Nexus-IDE": {
+    "total_commits": 19,
+    "additions": 50463,
+    "deletions": 4858
+  },
+  "advit-singh/Kessler-3D-Satellite-Simulation": {
+    "total_commits": 22,
+    "additions": 28992,
+    "deletions": 3720
+  },
+  "advit-singh/Nexus-Custom-Language-and-IDE": {
     "total_commits": 19,
     "additions": 50463,
     "deletions": 4858
