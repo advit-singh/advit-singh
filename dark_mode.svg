@@ -23,7 +23,7 @@
 
     <!-- System Info -->
     <text x="340" y="75" class="dots" xml:space="preserve">.  <tspan class="label">OS:</tspan> ........................ <tspan class="value">Windows 11, Android</tspan></text>
-    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 2 months, 12 days</tspan></text>
+    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 2 months, 13 days</tspan></text>
     <text x="340" y="115" class="dots" xml:space="preserve">.  <tspan class="label">IDE:</tspan> ....................... <tspan class="value">VSCode</tspan></text>
 
     <text x="340" y="135" class="dots">.</text>
@@ -49,9 +49,9 @@
 
     <!-- GitHub Stats -->
     <text x="340" y="355" class="dots" xml:space="preserve">- <tspan class="value">GitHub Stats</tspan> ---------------------------------------------</text>
-    <text x="340" y="375" class="dots" xml:space="preserve">.  <tspan class="label">Repos:</tspan> ..................... <tspan class="value" id="repo_data">24</tspan> {Contributed: <tspan class="value" id="contrib_data">1</tspan>}</text>
-    <text x="340" y="395" class="dots" xml:space="preserve">.  <tspan class="label">Commits:</tspan> ................... <tspan class="value" id="commit_data">378</tspan></text>
-    <text x="340" y="415" class="dots" xml:space="preserve">.  <tspan class="label">Lines of Code on GitHub:</tspan> ... <tspan class="value" id="loc_data">5,490,533</tspan> ( <tspan class="green" id="loc_add_data">3,017,462++</tspan>, <tspan class="red" id="loc_del_data">2,473,071--</tspan> )</text>
+    <text x="340" y="375" class="dots" xml:space="preserve">.  <tspan class="label">Repos:</tspan> ..................... <tspan class="value" id="repo_data">25</tspan> {Contributed: <tspan class="value" id="contrib_data">1</tspan>}</text>
+    <text x="340" y="395" class="dots" xml:space="preserve">.  <tspan class="label">Commits:</tspan> ................... <tspan class="value" id="commit_data">394</tspan></text>
+    <text x="340" y="415" class="dots" xml:space="preserve">.  <tspan class="label">Lines of Code on GitHub:</tspan> ... <tspan class="value" id="loc_data">5,614,708</tspan> ( <tspan class="green" id="loc_add_data">3,141,583++</tspan>, <tspan class="red" id="loc_del_data">2,473,125--</tspan> )</text>
 
     <!-- Prompt Footer -->
     <text x="65" y="420" class="value"><tspan fill="#98c379">➜</tspan> <tspan fill="#61afef">~</tspan> $ echo "Have a nice day!"</text>
