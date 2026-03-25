@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 65,
+    "total_commits": 66,
     "additions": 813,
     "deletions": 426
   },
@@ -70,7 +70,7 @@
     "deletions": 35152
   },
   "advit-singh/yt-automation": {
-    "total_commits": 271,
+    "total_commits": 272,
     "additions": 15250,
     "deletions": 1910
   },
@@ -123,5 +123,10 @@
     "total_commits": 35,
     "additions": 150161,
     "deletions": 1073
+  },
+  "advit-singh/valley_forge_2026": {
+    "total_commits": 1,
+    "additions": 15,
+    "deletions": 0
   }
 }
