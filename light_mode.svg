@@ -23,7 +23,7 @@
 
     <!-- System Info -->
     <text x="340" y="75" class="dots" xml:space="preserve">.  <tspan class="label">OS:</tspan> ........................ <tspan class="value">Windows 11, Android</tspan></text>
-    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 3 months, 2 days</tspan></text>
+    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 3 months, 3 days</tspan></text>
     <text x="340" y="115" class="dots" xml:space="preserve">.  <tspan class="label">IDE:</tspan> ....................... <tspan class="value">VSCode</tspan></text>
 
     <text x="340" y="135" class="dots">.</text>
