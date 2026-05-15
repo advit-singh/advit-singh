@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 116,
+    "total_commits": 117,
     "additions": 813,
     "deletions": 426
   },
@@ -133,5 +133,10 @@
     "total_commits": 1,
     "additions": 13323,
     "deletions": 0
+  },
+  "advit-singh/axion-v2": {
+    "total_commits": 6,
+    "additions": 18298,
+    "deletions": 1230
   }
 }
