@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 149,
+    "total_commits": 150,
     "additions": 813,
     "deletions": 426
   },
@@ -138,5 +138,10 @@
     "total_commits": 5,
     "additions": 14262,
     "deletions": 699
+  },
+  "advit-singh/tuxguitar": {
+    "total_commits": 3897,
+    "additions": 0,
+    "deletions": 0
   }
 }
