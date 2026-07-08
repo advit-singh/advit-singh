@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 170,
+    "total_commits": 171,
     "additions": 813,
     "deletions": 426
   },
@@ -153,5 +153,15 @@
     "total_commits": 141,
     "additions": 148602,
     "deletions": 6294
+  },
+  "advit-singh/klayout": {
+    "total_commits": 7924,
+    "additions": 0,
+    "deletions": 0
+  },
+  "advit-singh/chip-design-project": {
+    "total_commits": 22,
+    "additions": 2274,
+    "deletions": 35
   }
 }
