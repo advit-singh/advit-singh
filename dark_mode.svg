@@ -23,7 +23,7 @@
 
     <!-- System Info -->
     <text x="340" y="75" class="dots" xml:space="preserve">.  <tspan class="label">OS:</tspan> ........................ <tspan class="value">Windows 11, Android</tspan></text>
-    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 6 months, 14 days</tspan></text>
+    <text x="340" y="95" class="dots" xml:space="preserve">.  <tspan class="label">Uptime:</tspan> .................... <tspan class="value" id="age_data">17 years, 6 months, 15 days</tspan></text>
     <text x="340" y="115" class="dots" xml:space="preserve">.  <tspan class="label">IDE:</tspan> ....................... <tspan class="value">VSCode</tspan></text>
 
     <text x="340" y="135" class="dots">.</text>
@@ -50,8 +50,8 @@
     <!-- GitHub Stats -->
     <text x="340" y="355" class="dots" xml:space="preserve">- <tspan class="value">GitHub Stats</tspan> ---------------------------------------------</text>
     <text x="340" y="375" class="dots" xml:space="preserve">.  <tspan class="label">Repos:</tspan> ..................... <tspan class="value" id="repo_data">30</tspan> {Contributed: <tspan class="value" id="contrib_data">2</tspan>}</text>
-    <text x="340" y="395" class="dots" xml:space="preserve">.  <tspan class="label">Commits:</tspan> ................... <tspan class="value" id="commit_data">635</tspan></text>
-    <text x="340" y="415" class="dots" xml:space="preserve">.  <tspan class="label">Lines of Code on GitHub:</tspan> ... <tspan class="value" id="loc_data">5,903,053</tspan> ( <tspan class="green" id="loc_add_data">3,414,885++</tspan>, <tspan class="red" id="loc_del_data">2,488,168--</tspan> )</text>
+    <text x="340" y="395" class="dots" xml:space="preserve">.  <tspan class="label">Commits:</tspan> ................... <tspan class="value" id="commit_data">682</tspan></text>
+    <text x="340" y="415" class="dots" xml:space="preserve">.  <tspan class="label">Lines of Code on GitHub:</tspan> ... <tspan class="value" id="loc_data">6,004,255</tspan> ( <tspan class="green" id="loc_add_data">3,504,560++</tspan>, <tspan class="red" id="loc_del_data">2,499,695--</tspan> )</text>
 
     <!-- Prompt Footer -->
     <text x="65" y="420" class="value"><tspan fill="#98c379">➜</tspan> <tspan fill="#61afef">~</tspan> $ echo "Have a nice day!"</text>
