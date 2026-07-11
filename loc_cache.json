@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 173,
+    "total_commits": 174,
     "additions": 813,
     "deletions": 426
   },
@@ -65,9 +65,9 @@
     "deletions": 13212
   },
   "RishabhK12/RxMind": {
-    "total_commits": 84,
-    "additions": 120655,
-    "deletions": 46112
+    "total_commits": 86,
+    "additions": 120693,
+    "deletions": 46190
   },
   "advit-singh/yt-automation": {
     "total_commits": 272,
@@ -135,9 +135,9 @@
     "deletions": 0
   },
   "advit-singh/axion-v2": {
-    "total_commits": 45,
-    "additions": 67241,
-    "deletions": 7323
+    "total_commits": 48,
+    "additions": 74834,
+    "deletions": 7899
   },
   "advit-singh/tuxguitar": {
     "total_commits": 3897,
@@ -163,5 +163,10 @@
     "total_commits": 28,
     "additions": 30585,
     "deletions": 791
+  },
+  "advit-singh/RxMind": {
+    "total_commits": 90,
+    "additions": 120948,
+    "deletions": 46297
   }
 }
