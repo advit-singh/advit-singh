@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 192,
+    "total_commits": 193,
     "additions": 813,
     "deletions": 426
   },
@@ -168,5 +168,10 @@
     "total_commits": 90,
     "additions": 120948,
     "deletions": 46297
+  },
+  "advit-singh/notion-automation": {
+    "total_commits": 7,
+    "additions": 240,
+    "deletions": 59
   }
 }
