@@ -20,7 +20,7 @@
     "deletions": 2
   },
   "advit-singh/advit-singh": {
-    "total_commits": 240,
+    "total_commits": 241,
     "additions": 813,
     "deletions": 426
   },
@@ -173,5 +173,10 @@
     "total_commits": 7,
     "additions": 240,
     "deletions": 59
+  },
+  "advit-singh/influence-suppression-consensus-cycling": {
+    "total_commits": 12,
+    "additions": 745753,
+    "deletions": 369446
   }
 }
